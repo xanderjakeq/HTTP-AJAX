@@ -10,14 +10,13 @@ export default class extends Component {
         }
     }
 
-    handleChange = e => {
-        e.preventDefault()
-        this.setState({
-            [e.target.name] : e.target.value
-        })
-    }
+    
 
     componentDidMount(){
+        this.getFriends()
+    }
+
+    getFriends = () => {
         axios.get('http://localhost:5000/friends').then(data => {
             console.log(data)
             this.setState({
@@ -28,10 +27,39 @@ export default class extends Component {
         })
     }
 
+    handleSubmit = async e => {
+        e.preventDefault()
+        let currState = this.state
+        if(currState.name && currState.age && currState.email){
+            await axios.post('http://localhost:5000/friends', {
+                name: currState.name,
+                age: currState.age,
+                email: currState.email
+            }).then(res => {
+                this.setState({
+                    name: null,
+                    age: null,
+                    email: null
+                }) 
+            }).catch(err => {
+                console.log(err)
+            })
+            this.getFriends()
+            
+        }else{
+            alert('please complete the form.')
+        }
+    }
+
+    handleChange = e => {
+        this.setState({
+            [e.target.name] : e.target.value
+        })
+    }
     render(){
         return(
             <>
-                <AddFriendForm onChange = {this.handleChange} name = {this.state.name} age = {this.state.age} email = {this.state.email}/>
+                <AddFriendForm submit = {this.handleSubmit} onChange = {this.handleChange} name = {this.state.name} age = {this.state.age} email = {this.state.email}/>
                 {this.state.friends ? 
                     this.state.friends.map(friend => {
                         return <Friend key = {friend.id} data = {friend}/>
@@ -48,8 +76,9 @@ const AddFriendForm = (props) => {
     return (
         <form onSubmit = {props.submit}>
             <input name = 'name' type = 'text' value = {props.name ? props.name : ''} onChange = {props.onChange}/>
-            <input name = 'age' type = 'number' value = {props.age? props.name : ''} onChange = {props.onChange}/>
-            <input name = 'email' type = 'text' value = {props.email? props.name : ''} onChange = {props.onChange}/>
+            <input name = 'age' type = 'number' value = {props.age? props.age : ''} onChange = {props.onChange}/>
+            <input name = 'email' type = 'text' value = {props.email? props.email : ''} onChange = {props.onChange}/>
+            <input type = 'submit' value = 'add Frwend'/>
         </form>
     )
 }
