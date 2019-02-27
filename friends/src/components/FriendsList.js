@@ -44,11 +44,21 @@ export default class extends Component {
             }).catch(err => {
                 console.log(err)
             })
+
             this.getFriends()
             
         }else{
             alert('please complete the form.')
         }
+    }
+
+    handleDelete = (id) => {
+        axios.delete(`http://localhost:5000/friends/${id}`).then(res => {
+            console.log(res)
+            this.getFriends()
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     handleChange = e => {
@@ -62,7 +72,7 @@ export default class extends Component {
                 <AddFriendForm submit = {this.handleSubmit} onChange = {this.handleChange} name = {this.state.name} age = {this.state.age} email = {this.state.email}/>
                 {this.state.friends ? 
                     this.state.friends.map(friend => {
-                        return <Friend key = {friend.id} data = {friend}/>
+                        return <Friend key = {friend.id} data = {friend} delete = {this.handleDelete}/>
                     }) 
                     :
                     'loading'
@@ -84,12 +94,13 @@ const AddFriendForm = (props) => {
 }
 
 const Friend = (props) => {
-    const {name, age, email} = props.data
+    const {name, age, email, id} = props.data
     return (
         <div>
             <h1>{name}</h1>
             <h3>{age}</h3>
             <h5>{email}</h5>
+            <button onClick = {() => props.delete(id)}>delete</button>
         </div>
     )
 }
