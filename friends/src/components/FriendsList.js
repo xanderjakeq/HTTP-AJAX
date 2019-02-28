@@ -17,7 +17,7 @@ export default class extends Component {
     }
 
     getFriends = () => {
-        axios.get('http://localhost:5000/friends').then(data => {
+        axios.get('https://powerful-sea-95282.herokuapp.com/friends').then(data => {
             console.log(data)
             this.setState({
                 friends: data.data
@@ -31,7 +31,7 @@ export default class extends Component {
         e.preventDefault()
         let currState = this.state
         if(currState.name && currState.age && currState.email){
-            await axios.post('http://localhost:5000/friends', {
+            await axios.post('https://powerful-sea-95282.herokuapp.com/friends', {
                 name: currState.name,
                 age: currState.age,
                 email: currState.email
@@ -53,7 +53,7 @@ export default class extends Component {
     }
 
     handleDelete = (id) => {
-        axios.delete(`http://localhost:5000/friends/${id}`).then(res => {
+        axios.delete(`https://powerful-sea-95282.herokuapp.com/friends/${id}`).then(res => {
             console.log(res)
             this.getFriends()
         }).catch(err => {
@@ -118,7 +118,7 @@ class Friend extends Component {
     }
     handleSubmitUpdate = e => {
         e.preventDefault()
-        axios.put(`http://localhost:5000/friends/${this.props.data.id}`, {
+        axios.put(`https://powerful-sea-95282.herokuapp.com/friends/${this.props.data.id}`, {
             name: this.state.name,
             age: this.state.age,
             email: this.state.email
