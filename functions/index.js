@@ -1,3 +1,4 @@
+const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -80,6 +81,8 @@ app.delete('/friends/:id', (req, res) => {
 	res.status(200).json(friends);
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log('server listening on port ');
+app.listen(5000, () => {
+  console.log('server listening on port 5000');
 });
+
+exports.server = functions.https.onRequest(app);
